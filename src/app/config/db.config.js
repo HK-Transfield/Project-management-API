@@ -1,6 +1,6 @@
 module.exports = {
-  HOST: "hostname",
-  USER: "username",
-  PASSWORD: "password",
-  DB: "dbname"
+  HOST: "localhost",
+  USER: "root",
+  PASSWORD: "",
+  DB: "zaradev"
 };
