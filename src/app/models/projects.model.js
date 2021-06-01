@@ -4,7 +4,7 @@ const db = require("./db");
  * @constructor
  * @param {*} projects 
  */
-const Projects = (projects) => {
+const Projects = function(projects) {
     this.id = projects.id;
     this.projectname = projects.projectname;
     this.projectdesc = projects.projectdesc;
@@ -45,7 +45,13 @@ Projects.getAll = result => {
     });
 }
 
+/**
+ * 
+ * @param {*} id 
+ * @param {*} result 
+ */
 Projects.getByID = (id, result) => {
+    console.log(id);
     db.query('SELECT * FROM projects WHERE id=?', id, (err, res) => {
         if (err) {
             console.log('error: ', err);
@@ -57,6 +63,11 @@ Projects.getByID = (id, result) => {
     });
 }
 
+/**
+ * 
+ * @param {*} projectname 
+ * @param {*} result 
+ */
 Projects.getByProjectname = (projectname, result) => { 
     db.query('SELECT * FROM projects WHERE projectname=?', projectname, (err, res) => {
         if (err) {
@@ -69,6 +80,12 @@ Projects.getByProjectname = (projectname, result) => {
     });
 }
 
+/**
+ * 
+ * @param {*} id 
+ * @param {*} project 
+ * @param {*} result 
+ */
 Projects.updateByID = (id, project, result) => {
     db.query(
         'Update projects set projectname=?, projectdesc=?, startdate=?, enddate=? WHERE id=?', 
@@ -85,9 +102,13 @@ Projects.updateByID = (id, project, result) => {
     );
 } 
 
+/**
+ * 
+ * @param {*} id 
+ * @param {*} result 
+ */
 Projects.deleteByID = (id, result) => { 
-
-    db.query('DELETE FROM projects WHERE id=', [id], (err, res) => {
+    db.query('DELETE FROM projects WHERE id=?', [id], (err, res) => {
         if (err) {
             console.log('error: ', err);
             result(null, err);
@@ -98,8 +119,18 @@ Projects.deleteByID = (id, result) => {
     });
 }
 
-Projects.deleteAllProjects = result => {
-    
+Projects.deleteAll = result => {
+    db.query('DELETE FROM projects', (err, res) => {
+        if (err) {
+            console.log('error: ', err);
+            result(null, err);
+            return
+        }
+        console.log('DELETED :', res);
+        result(null,res);
+    }
+
+    );
 }
 
 

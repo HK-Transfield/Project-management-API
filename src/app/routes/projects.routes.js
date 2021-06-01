@@ -1,6 +1,5 @@
 module.exports = app => {
   const projects = require("../controllers/projects.controller");
-  const router = app.router();
 
   // get a list or all projects available in the database
   app.get('/projects', projects.getAll); 
@@ -19,4 +18,7 @@ module.exports = app => {
   
   // delete project by project ID
   app.delete('/projects/:id', projects.deleteByID);
+
+  // delete all projects from the table
+  app.delete('/projects', projects.deleteAll);
 }
