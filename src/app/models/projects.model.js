@@ -5,7 +5,6 @@ const db = require("./db");
  * @param {*} projects 
  */
 const Projects = function(projects) {
-    this.id = projects.id;
     this.projectname = projects.projectname;
     this.projectdesc = projects.projectdesc;
     this.startdate = projects.startdate;
@@ -69,6 +68,7 @@ Projects.getByID = (id, result) => {
  * @param {*} result 
  */
 Projects.getByProjectname = (projectname, result) => { 
+    console.log('name ', projectname);
     db.query('SELECT * FROM projects WHERE projectname=?', projectname, (err, res) => {
         if (err) {
             console.log('error: ', err);
