@@ -2,7 +2,7 @@ const db = require("./db");
 
 /**
  * @constructor
- * @param {*} projects 
+ * @param {JSON} projects 
  */
 const Projects = function(projects) {
     this.projectname = projects.projectname;
@@ -21,10 +21,11 @@ Projects.create = (newProject, result) => {
         if (err) {
             console.log('error: ', err);
             result(err, null);
-            return;
+        } else {
+            console.log('created project: ', {id: res.insertID, ...newProject});
+            result(null, {id: res.insertID, ...newProject});
         }
-        console.log('created project: ', {id: res.insertID, ...newProject});
-        result(null, {id: res.insertID, ...newProject});
+        
     });
 }
 
@@ -37,10 +38,10 @@ Projects.getAll = result => {
         if (err) {
             console.log('error: ', err);
             result(null, err);
-            return
-        }
-        console.log('projects :', res);
-        result(null,res);
+        } else {
+            console.log('projects :', !res || !res.length ? 'empty' : res);
+            result(null,res);
+        }        
     });
 }
 
@@ -50,15 +51,14 @@ Projects.getAll = result => {
  * @param {*} result 
  */
 Projects.getByID = (id, result) => {
-    console.log(id);
     db.query('SELECT * FROM projects WHERE id=?', id, (err, res) => {
         if (err) {
             console.log('error: ', err);
             result(null, err);
-            return
+        } else {
+            console.log('projects :', !res || !res.length ? 'empty' : res);
+            result(null,res);
         }
-        console.log('projects :', res);
-        result(null,res);
     });
 }
 
@@ -73,10 +73,10 @@ Projects.getByProjectname = (projectname, result) => {
         if (err) {
             console.log('error: ', err);
             result(null, err);
-            return
-        }
-        console.log('projects :', res);
-        result(null,res);
+        } else {
+            console.log('projects :', !res || !res.length ? 'empty' : res);
+            result(null,res);
+        }     
     });
 }
 
@@ -93,11 +93,11 @@ Projects.updateByID = (id, project, result) => {
         (err, res) => {
             if (err) {
                 console.log('error: ', err);
-                result(null, err);
-                return
-            }
-            console.log('projects :', res);
-            result(null,res);
+                result(null, err);   
+            } else {
+                console.log('projects :', res);
+                result(null,res);
+            }          
         }
     );
 } 
@@ -112,10 +112,10 @@ Projects.deleteByID = (id, result) => {
         if (err) {
             console.log('error: ', err);
             result(null, err);
-            return
+        } else {
+            console.log('DELETED :', res);
+            result(null,res);
         }
-        console.log('DELETED :', res);
-        result(null,res);
     });
 }
 
@@ -124,13 +124,11 @@ Projects.deleteAll = result => {
         if (err) {
             console.log('error: ', err);
             result(null, err);
-            return
+        } else {
+            console.log('DELETED :', res);
+            result(null,res);
         }
-        console.log('DELETED :', res);
-        result(null,res);
-    }
-
-    );
+    });
 }
 
 
