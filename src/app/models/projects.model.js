@@ -9,6 +9,8 @@
 const db = require("./db");
 
 /**
+ * Instantiates a new Projects object.
+ * 
  * @constructor
  * @param {JSON} projects An object representing a new project
  */
@@ -32,8 +34,8 @@ Projects.create = (newProject, result) => {
             console.log('error: ', err);
             result(err, null);
         } else {
-            console.log('created project: ', {id: res.insertID, ...newProject});
-            result(null, {id: res.insertID, ...newProject});
+            console.log('created project: ', {id: res.insertId, ...newProject});
+            result(null, {id: res.insertId, ...newProject});
         }
         
     });
@@ -49,10 +51,10 @@ Projects.getAll = result => {
     db.query('SELECT * FROM projects', (err, res) => {
         if (err) {
             console.log('error: ', err);
-            result(null, err);
+            result(err, null);
         } else {
-            console.log('projects :', !res || !res.length ? 'empty' : res);
-            result(null,res);
+            console.log('projects :', !res || !res.length ? 'empty response ' + res : res);
+            result(null, res);
         }        
     });
 }
@@ -68,10 +70,10 @@ Projects.getByID = (id, result) => {
     db.query('SELECT * FROM projects WHERE id=?', id, (err, res) => {
         if (err) {
             console.log('error: ', err);
-            result(null, err);
+            result(err, null);
         } else {
-            console.log('projects :', !res || !res.length ? 'empty' : res);
-            result(null,res);
+            console.log('projects :', !res || !res.length ? 'empty response ' + res : res);
+            result(null, res);
         }
     });
 }
@@ -88,10 +90,10 @@ Projects.getByProjectname = (projectname, result) => {
     db.query('SELECT * FROM projects WHERE projectname=?', projectname, (err, res) => {
         if (err) {
             console.log('error: ', err);
-            result(null, err);
+            result(err, null);
         } else {
-            console.log('projects :', !res || !res.length ? 'empty' : res);
-            result(null,res);
+            console.log('projects :', !res || !res.length ? 'empty response ' + res : res);
+            result(null, res);
         }     
     });
 }
@@ -100,7 +102,7 @@ Projects.getByProjectname = (projectname, result) => {
  * Updates entries in the database
  * 
  * @param {int} id The unique identifier of the project being updated
- * @param {JSON} project 
+ * @param {JSON} project A new object containing updated keys
  * @param {function} result Callback function to handle results of response
  */
 Projects.updateByID = (id, project, result) => {
@@ -110,10 +112,9 @@ Projects.updateByID = (id, project, result) => {
         (err, res) => {
             if (err) {
                 console.log('error: ', err);
-                result(null, err);   
+                result(err, null);   
             } else {
-                console.log('projects :', res);
-                result(null,res);
+                result(null, res.affectedRows);
             }          
         }
     );
@@ -129,10 +130,9 @@ Projects.deleteByID = (id, result) => {
     db.query('DELETE FROM projects WHERE id=?', [id], (err, res) => {
         if (err) {
             console.log('error: ', err);
-            result(null, err);
+            result(err, null);
         } else {
-            console.log('DELETED :', res);
-            result(null,res);
+            result(null, res.affectedRows);
         }
     });
 }
@@ -146,13 +146,11 @@ Projects.deleteAll = result => {
     db.query('DELETE FROM projects', (err, res) => {
         if (err) {
             console.log('error: ', err);
-            result(null, err);
+            result(err, null);
         } else {
-            console.log('DELETED :', res);
-            result(null,res);
+            result(null, res);
         }
     });
 }
-
 
 module.exports = Projects;
